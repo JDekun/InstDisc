@@ -106,7 +106,7 @@ def kNN(epoch, net, lemniscate, trainloader, testloader, K, sigma, recompute_mem
             dist = torch.mm(features, trainFeatures)
 
             yd, yi = dist.topk(K, dim=1, largest=True, sorted=True)
-            candidates = trainLabels.view(1,-1).expand(batchSize, -1)
+            candidates = trainLabels.contiguous().view(1,-1).expand(batchSize, -1)
             retrieval = torch.gather(candidates, 1, yi)
 
             retrieval_one_hot.resize_(batchSize * K, C).zero_()

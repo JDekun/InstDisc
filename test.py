@@ -25,7 +25,7 @@ def NN(epoch, net, lemniscate, trainloader, testloader, recompute_memory=0):
         trainloader.dataset.transform = testloader.dataset.transform
         temploader = torch.utils.data.DataLoader(trainloader.dataset, batch_size=100, shuffle=False, num_workers=1)
         for batch_idx, (inputs, targets, indexes) in enumerate(temploader):
-            targets = targets.cuda(async=True)
+            targets = targets.cuda(non_blocking=True)
             batchSize = inputs.size(0)
             features = net(inputs)
             trainFeatures[:, batch_idx*batchSize:batch_idx*batchSize+batchSize] = features.data.t()
@@ -35,7 +35,7 @@ def NN(epoch, net, lemniscate, trainloader, testloader, recompute_memory=0):
     end = time.time()
     with torch.no_grad():
         for batch_idx, (inputs, targets, indexes) in enumerate(testloader):
-            targets = targets.cuda(async=True)
+            targets = targets.cuda(non_blocking=True)
             batchSize = inputs.size(0)
             features = net(inputs)
             net_time.update(time.time() - end)
@@ -83,7 +83,7 @@ def kNN(epoch, net, lemniscate, trainloader, testloader, K, sigma, recompute_mem
         trainloader.dataset.transform = testloader.dataset.transform
         temploader = torch.utils.data.DataLoader(trainloader.dataset, batch_size=100, shuffle=False, num_workers=1)
         for batch_idx, (inputs, targets, indexes) in enumerate(temploader):
-            targets = targets.cuda(async=True)
+            targets = targets.cuda(non_blocking=True)
             batchSize = inputs.size(0)
             features = net(inputs)
             trainFeatures[:, batch_idx*batchSize:batch_idx*batchSize+batchSize] = features.data.t()
@@ -97,7 +97,7 @@ def kNN(epoch, net, lemniscate, trainloader, testloader, K, sigma, recompute_mem
         retrieval_one_hot = torch.zeros(K, C).cuda()
         for batch_idx, (inputs, targets, indexes) in enumerate(testloader):
             end = time.time()
-            targets = targets.cuda(async=True)
+            targets = targets.cuda(non_blocking=True)
             batchSize = inputs.size(0)
             features = net(inputs)
             net_time.update(time.time() - end)

@@ -172,7 +172,7 @@ def train(epoch):
                                 epoch, batch_idx, len(trainloader), batch_time=batch_time, data_time=data_time, train_loss=train_loss))
 
         writer.add_scalar('training loss',
-                            train_loss,
+                            train_loss.avg,
                             epoch * len(trainloader) + batch_idx)
 
         # print('Epoch: [{}][{}/{}]'

@@ -138,7 +138,7 @@ def train(epoch):
     net.train()
 
     end = time.time()
-    loader = tqdm(enumerate(trainloader), desc='Data loading')
+    loader = tqdm(enumerate(trainloader), desc='Train')
     for batch_idx, (inputs, targets, indexes) in loader:
         data_time.update(time.time() - end)
         inputs, targets, indexes = inputs.to(device), targets.to(device), indexes.to(device)

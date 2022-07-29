@@ -97,7 +97,7 @@ def kNN(epoch, net, lemniscate, trainloader, testloader, K, sigma, recompute_mem
     end = time.time()
     with torch.no_grad():
         retrieval_one_hot = torch.zeros(K, C).cuda()
-        loader = tqdm(enumerate(trainloader), desc='Test loading')
+        loader = tqdm(enumerate(trainloader), desc='Test')
         for batch_idx, (inputs, targets, indexes) in loader:
             end = time.time()
             targets = targets.cuda(non_blocking=True)

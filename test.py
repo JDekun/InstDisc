@@ -7,6 +7,11 @@ import numpy as np
 
 from tqdm import tqdm
 
+from torch.utils.tensorboard import SummaryWriter
+
+# default `log_dir` is "runs" - we'll be more specific here
+writer = SummaryWriter('runs/cifar')
+
 def NN(epoch, net, lemniscate, trainloader, testloader, recompute_memory=0):
     net.eval()
     net_time = AverageMeter()
@@ -139,7 +144,11 @@ def kNN(epoch, net, lemniscate, trainloader, testloader, K, sigma, recompute_mem
             #       'Top1: {:.2f}  Top5: {:.2f}'.format(
             #       total, testsize, top1*100./total, top5*100./total, net_time=net_time, cls_time=cls_time))
 
-    print(top1*100./total)
+            writer.add_scalar('test acc',
+                    top1*100./total,
+                    epoch * len(trainloader) + batch_idx)
+
+    print("accuracy: {:.2f}".format(top1*100./total))
 
     return top1/total
 

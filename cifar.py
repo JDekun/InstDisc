@@ -27,6 +27,10 @@ from lib.utils import AverageMeter
 from test import NN, kNN
 
 from tqdm import tqdm
+from torch.utils.tensorboard import SummaryWriter
+
+# default `log_dir` is "runs" - we'll be more specific here
+writer = SummaryWriter('runs/cifar')
 
 parser = argparse.ArgumentParser(description='PyTorch CIFAR10 Training')
 parser.add_argument('--lr', default=0.03, type=float, help='learning rate')
@@ -78,6 +82,10 @@ ndata = trainset.__len__()
 
 print('==> Building model..')
 net = models.__dict__['ResNet18'](low_dim=args.low_dim)
+dataiter = iter(trainloader)
+images,  = dataiter.next()
+writer.add_graph(net, images)
+
 # define leminiscate
 if args.nce_k > 0:
     lemniscate = NCEAverage(args.low_dim, ndata, args.nce_k, args.nce_t, args.nce_m)
@@ -120,7 +128,7 @@ def adjust_learning_rate(optimizer, epoch):
     lr = args.lr
     if epoch >= 80:
         lr = args.lr * (0.1 ** ((epoch-80) // 40))
-    print(lr)
+    print("lr=%d" % lr)
     for param_group in optimizer.param_groups:
         param_group['lr'] = lr
 
@@ -162,6 +170,10 @@ def train(epoch):
                                 'Data: {data_time.val:.3f} ({data_time.avg:.3f}) '
                                 'Loss: {train_loss.val:.4f} ({train_loss.avg:.4f})'.format(
                                 epoch, batch_idx, len(trainloader), batch_time=batch_time, data_time=data_time, train_loss=train_loss))
+
+        writer.add_scalar('training loss',
+                            train_loss,
+                            epoch * len(trainloader) + batch_idx)
 
         # print('Epoch: [{}][{}/{}]'
         #       'Time: {batch_time.val:.3f} ({batch_time.avg:.3f}) '

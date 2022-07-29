@@ -48,12 +48,15 @@ parser.add_argument('--batch-train', default=2048, type=int,
                     help='batchsize for train')
 parser.add_argument('--batch-test', default=1000, type=int,
                     help='batchsize for test')
+parser.add_argument('--epochs', default=200, type=int,
+                    help='epoch')
 
 args = parser.parse_args()
 
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 best_acc = 0  # best test accuracy
 start_epoch = 0  # start from epoch 0 or last checkpoint epoch
+epochs = args.epochs
 
 # Data
 print('==> Preparing data..')
@@ -181,7 +184,7 @@ def train(epoch):
         #       'Loss: {train_loss.val:.4f} ({train_loss.avg:.4f})'.format(
         #       epoch, batch_idx, len(trainloader), batch_time=batch_time, data_time=data_time, train_loss=train_loss))
 
-for epoch in range(start_epoch, start_epoch+200):
+for epoch in range(start_epoch, epochs):
     train(epoch)
     acc = kNN(epoch, net, lemniscate, trainloader, testloader, 200, args.nce_t, 0)
 

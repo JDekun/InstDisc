@@ -85,12 +85,15 @@ ndata = trainset.__len__()
 
 print('==> Building model..')
 net = models.__dict__['ResNet18'](low_dim=args.low_dim)
-# dataiter = iter(trainloader)
-# img, tar, ind  = dataiter.next()
-batch_size = 1
-input_shape = (3, 32, 32)
-img = torch.randn(batch_size,*input_shape).cuda()
+
+
+dataiter = iter(trainloader)
+img, tar, ind  = dataiter.next()
+# batch_size = 1
+# input_shape = (3, 32, 32)
+# img = torch.randn(batch_size,*input_shape).cuda()
 writer.add_graph(net, img)
+
 
 # define leminiscate
 if args.nce_k > 0:

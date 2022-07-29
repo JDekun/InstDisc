@@ -38,6 +38,10 @@ parser.add_argument('--nce-t', default=0.1, type=float,
                     metavar='T', help='temperature parameter for softmax')
 parser.add_argument('--nce-m', default=0.5, type=float,
                     metavar='M', help='momentum for non-parametric updates')
+parser.add_argument('--batch-train', default=2048, type=int,
+                    help='batchsize for train')
+parser.add_argument('--batch-test', default=1000, type=int,
+                    help='batchsize for test')
 
 args = parser.parse_args()
 
@@ -62,10 +66,10 @@ transform_test = transforms.Compose([
 ])
 
 trainset = datasets.CIFAR10Instance(root='../../input', train=True, download=True, transform=transform_train)
-trainloader = torch.utils.data.DataLoader(trainset, batch_size=2048, shuffle=True, num_workers=2)
+trainloader = torch.utils.data.DataLoader(trainset, batch_size=args.batch_train, shuffle=True, num_workers=2)
 
 testset = datasets.CIFAR10Instance(root='../../input', train=False, download=True, transform=transform_test)
-testloader = torch.utils.data.DataLoader(testset, batch_size=1000, shuffle=False, num_workers=2)
+testloader = torch.utils.data.DataLoader(testset, batch_size=args.batch_test, shuffle=False, num_workers=2)
 
 classes = ('plane', 'car', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck')
 ndata = trainset.__len__()

@@ -1,6 +1,7 @@
 data/*
 checkpoint/*
 logs/*
+runs/*
 
 *.pyc
 *.bak

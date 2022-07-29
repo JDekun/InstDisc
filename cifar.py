@@ -117,11 +117,11 @@ net.to(device)
 lemniscate.to(device)
 criterion.to(device)
 
-dataiter = iter(trainloader)
-img, tar, ind  = dataiter.next()
-# batch_size = 1
-# input_shape = (3, 32, 32)
-# img = torch.randn(batch_size,*input_shape).cuda()
+# dataiter = iter(trainloader)
+# img, tar, ind  = dataiter.next()
+batch_size = 1
+input_shape = (3, 32, 32)
+img = torch.randn(batch_size,*input_shape).cuda()
 writer.add_graph(net, img)
 
 if args.test_only:

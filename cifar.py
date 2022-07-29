@@ -83,7 +83,7 @@ ndata = trainset.__len__()
 print('==> Building model..')
 net = models.__dict__['ResNet18'](low_dim=args.low_dim)
 dataiter = iter(trainloader)
-images,  = dataiter.next()
+images, tar, ind  = dataiter.next()
 writer.add_graph(net, images)
 
 # define leminiscate

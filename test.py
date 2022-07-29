@@ -5,6 +5,8 @@ from lib.utils import AverageMeter
 import torchvision.transforms as transforms
 import numpy as np
 
+from tqdm import tqdm
+
 def NN(epoch, net, lemniscate, trainloader, testloader, recompute_memory=0):
     net.eval()
     net_time = AverageMeter()
@@ -95,7 +97,8 @@ def kNN(epoch, net, lemniscate, trainloader, testloader, K, sigma, recompute_mem
     end = time.time()
     with torch.no_grad():
         retrieval_one_hot = torch.zeros(K, C).cuda()
-        for batch_idx, (inputs, targets, indexes) in enumerate(testloader):
+        loader = tqdm(enumerate(trainloader), desc='Test loading')
+        for batch_idx, (inputs, targets, indexes) in loader:
             end = time.time()
             targets = targets.cuda(non_blocking=True)
             batchSize = inputs.size(0)
@@ -124,11 +127,17 @@ def kNN(epoch, net, lemniscate, trainloader, testloader, K, sigma, recompute_mem
 
             total += targets.size(0)
 
-            print('Test [{}/{}]\t'
-                  'Net Time {net_time.val:.3f} ({net_time.avg:.3f})\t'
-                  'Cls Time {cls_time.val:.3f} ({cls_time.avg:.3f})\t'
-                  'Top1: {:.2f}  Top5: {:.2f}'.format(
-                  total, testsize, top1*100./total, top5*100./total, net_time=net_time, cls_time=cls_time))
+            loader.set_description('Test [{}/{}]\t'
+                                    'Net Time {net_time.val:.3f} ({net_time.avg:.3f})\t'
+                                    'Cls Time {cls_time.val:.3f} ({cls_time.avg:.3f})\t'
+                                    'Top1: {:.2f}  Top5: {:.2f}'.format(
+                                    total, testsize, top1*100./total, top5*100./total, net_time=net_time, cls_time=cls_time))
+
+            # print('Test [{}/{}]\t'
+            #       'Net Time {net_time.val:.3f} ({net_time.avg:.3f})\t'
+            #       'Cls Time {cls_time.val:.3f} ({cls_time.avg:.3f})\t'
+            #       'Top1: {:.2f}  Top5: {:.2f}'.format(
+            #       total, testsize, top1*100./total, top5*100./total, net_time=net_time, cls_time=cls_time))
 
     print(top1*100./total)
 

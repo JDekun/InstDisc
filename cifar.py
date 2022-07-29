@@ -26,6 +26,8 @@ from lib.NCECriterion import NCECriterion
 from lib.utils import AverageMeter
 from test import NN, kNN
 
+from tqdm import tqdm
+
 parser = argparse.ArgumentParser(description='PyTorch CIFAR10 Training')
 parser.add_argument('--lr', default=0.03, type=float, help='learning rate')
 parser.add_argument('--resume', '-r', default='', type=str, help='resume from checkpoint')
@@ -136,7 +138,8 @@ def train(epoch):
     net.train()
 
     end = time.time()
-    for batch_idx, (inputs, targets, indexes) in enumerate(trainloader):
+    loader = tqdm(enumerate(trainloader), desc='Data loading')
+    for batch_idx, (inputs, targets, indexes) in loader:
         data_time.update(time.time() - end)
         inputs, targets, indexes = inputs.to(device), targets.to(device), indexes.to(device)
         optimizer.zero_grad()
@@ -154,11 +157,17 @@ def train(epoch):
         batch_time.update(time.time() - end)
         end = time.time()
 
-        print('Epoch: [{}][{}/{}]'
-              'Time: {batch_time.val:.3f} ({batch_time.avg:.3f}) '
-              'Data: {data_time.val:.3f} ({data_time.avg:.3f}) '
-              'Loss: {train_loss.val:.4f} ({train_loss.avg:.4f})'.format(
-              epoch, batch_idx, len(trainloader), batch_time=batch_time, data_time=data_time, train_loss=train_loss))
+        loader.set_description('Epoch: [{}][{}/{}]'
+                                'Time: {batch_time.val:.3f} ({batch_time.avg:.3f}) '
+                                'Data: {data_time.val:.3f} ({data_time.avg:.3f}) '
+                                'Loss: {train_loss.val:.4f} ({train_loss.avg:.4f})'.format(
+                                epoch, batch_idx, len(trainloader), batch_time=batch_time, data_time=data_time, train_loss=train_loss))
+
+        # print('Epoch: [{}][{}/{}]'
+        #       'Time: {batch_time.val:.3f} ({batch_time.avg:.3f}) '
+        #       'Data: {data_time.val:.3f} ({data_time.avg:.3f}) '
+        #       'Loss: {train_loss.val:.4f} ({train_loss.avg:.4f})'.format(
+        #       epoch, batch_idx, len(trainloader), batch_time=batch_time, data_time=data_time, train_loss=train_loss))
 
 for epoch in range(start_epoch, start_epoch+200):
     train(epoch)

@@ -29,7 +29,6 @@ from test import NN, kNN
 from tqdm import tqdm
 from torch.utils.tensorboard import SummaryWriter
 
-# default `log_dir` is "runs" - we'll be more specific here
 writer = SummaryWriter('runs/cifar')
 
 parser = argparse.ArgumentParser(description='PyTorch CIFAR10 Training')
@@ -50,7 +49,6 @@ parser.add_argument('--batch-test', default=1000, type=int,
                     help='batchsize for test')
 parser.add_argument('--epochs', default=200, type=int,
                     help='epoch')
-
 args = parser.parse_args()
 
 device = 'cuda' if torch.cuda.is_available() else 'cpu'

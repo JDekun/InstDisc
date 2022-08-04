@@ -144,9 +144,13 @@ def kNN(epoch, net, lemniscate, trainloader, testloader, K, sigma, recompute_mem
             #       'Top1: {:.2f}  Top5: {:.2f}'.format(
             #       total, testsize, top1*100./total, top5*100./total, net_time=net_time, cls_time=cls_time))
 
-            writer.add_scalar('test acc',
+            writer.add_scalar('top1 acc',
                     top1*100./total,
                     epoch * len(trainloader) + batch_idx)
+            writer.add_scalar('top5 acc',
+                    top5*100./total,
+                    epoch * len(trainloader) + batch_idx)
+            
 
     print("accuracy: {:.2f}".format(top1*100./total))
 

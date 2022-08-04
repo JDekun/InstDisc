@@ -1,4 +1,4 @@
-<a href="https://github.com/JDekun/instdisc" target="_parent"><img src="https://badgen.net/badge/icon/instdisc?icon=github&label=GitHub" alt="github"/></a>
+<a href="https://github.com/JDekun/instdisc" target="_parent"><img src="https://badgen.net/badge/icon/InstDisc?icon=github&label=GitHub" alt="github"/></a>
 ## Unsupervised Feature Learning via Non-parameteric Instance Discrimination
 
 This repo constains the pytorch implementation for the CVPR2018 unsupervised learning paper [(arxiv)](https://arxiv.org/pdf/1805.01978.pdf).
